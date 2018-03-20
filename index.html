@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="https://accel-baas.azurewebsites.net/1.0/ab.js"></script>
+    <script>
+      // Initialize
+      var config = {
+        apiKey: "API_KEY",
+      };
+      ab.initializeApp(config);
+    </script>
+  </head>
+
+ <body>
+  <span></span>
+    <div id="message">
+      <h1>ACCEL BaaSテスト</h1>
+      <input type="button" name="wallet" value="ウォレット生成" class="create_wallet"><br />
+      ウォレットアドレス：<span class="wallet_id_show"></span>
+      <br />
+      <br /><input type="text" name="wallet" value="" placeholder="wallet" class="wallet"><input type="button" name="wallet" value="確認" class="get_wallet">
+      <br />
+      <br />誰から:<input type="text" name="from" value="" placeholder="wallet" class="from">誰へ:<input type="text" name="to" value="" placeholder="wallet" class="to"><input type="text" name="amount" value="" placeholder="10" class="amount">LSK
+      <input type="button" name="wallet" value="送金" class="create_transaction">
+    </div>
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+   	<script>
+   		
+      var mywallet = "";
+      var mymnemonic = "";
+      var transaction = "";
+      var to = "";
+
+   		$(function(){
+        // ウォレット生成ボタン
+   			$(".create_wallet").on("click", function(){
+  				blockchainAccess.createWallet("test", function(wallet, mnemonic) {
+  					console.log("done");
+            mywallet = wallet;
+            mymnemonic = mnemonic;
+  					$(".wallet_id_show").html($(".wallet_id_show").html() + wallet);
+  				});
+   			});
+
+        // ウォレット残高確認ボタン
+        $(".get_wallet").on("click", function(){
+          var wallet = $(".wallet").val();
+          blockchainAccess.getWallet(wallet, function(data) {
+            console.log(data);
+          });
+        });
+
+        // 送金ボタン
+        $(".create_transaction").on("click", function(){
+            to = $(".to").val();
+            var amount = $(".amount").val();
+            var from = $(".from").val();
+            blockchainAccess.createTransaction(to, amount, from, "test", function(tid) {
+              console.log(tid);
+              transaction = tid;
+            });
+        });
+   		});
+    </script>
+  </body>
+</html>
